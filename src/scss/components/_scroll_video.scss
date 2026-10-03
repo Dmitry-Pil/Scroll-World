@@ -1,0 +1,72 @@
+// this distance is the first tuning knob for the pace of the 41-second film
+.scroll_video {
+  height: calc(100svh + 10000px);
+
+  // hold one viewport in place while the longer section scrolls past it
+  &__stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+    background: #101010;
+  }
+
+  // cover fills the viewport without distortion; excess edges are cropped
+  &__media {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  // a real loading state stays visible until the decoder provides the first frame
+  &__loading {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: #101010;
+    padding: 24px;
+    text-align: center;
+  }
+
+  // temporary diagnostics let us check scroll position against decoded video time
+  &__debug {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    // a dark backing keeps the numbers readable over both bright and dark scenes
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.7);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    pointer-events: none;
+  }
+
+  // no forced scrubbing when the visitor has asked for less motion
+  &--reduced {
+    height: 100svh;
+
+    .scroll_video__stage {
+      position: relative;
+    }
+
+    .scroll_video__debug {
+      top: 16px;
+      right: 16px;
+      bottom: auto;
+      left: auto;
+    }
+  }
+
+  // keep the timeline away from the bottom edge on smaller screens
+  @media (max-width: 600px) {
+    &__debug {
+      left: 16px;
+      bottom: 60px;
+    }
+  }
+}

@@ -1,0 +1,54 @@
+@use '../abstracts/variables' as vars;
+
+// a horizontal footer closes the film in the requested blue and warm white
+.site_footer {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr 1.2fr;
+  gap: clamp(24px, 3vw, 56px);
+  padding: clamp(40px, 5vw, 80px);
+  background: vars.$color_blue;
+  color: vars.$color_cream;
+
+  // medium-weight caps tie the project information to the large video titles
+  font-weight: 500;
+  text-transform: uppercase;
+  line-height: 1.3;
+
+  h2 {
+    margin: 0 0 20px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+  }
+
+  // primary lines introduce each block, with production details beneath them
+  p {
+    max-width: 30ch;
+    margin: 0;
+    font-size: clamp(18px, 1.45vw, 24px);
+    letter-spacing: -0.025em;
+  }
+
+  // smaller supporting text gives credits room without making the footer dominate the film
+  p.site_footer__detail {
+    margin-top: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    letter-spacing: 0;
+  }
+
+  // tablet screens use two columns so model names and author credits stay readable
+  @media (max-width: 1000px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  // retain a readable layout on phones instead of squeezing four columns
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: 32px;
+
+    h2 {
+      margin-bottom: 12px;
+    }
+  }
+}

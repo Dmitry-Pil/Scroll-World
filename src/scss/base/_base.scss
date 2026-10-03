@@ -1,0 +1,20 @@
+@use '../abstracts/variables' as vars;
+
+// basic reset so the video reaches all four edges of the viewport
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: #101010;
+  color: #fff;
+  // one shared font keeps the video overlays and future footer consistent
+  font-family: vars.$font_primary;
+  font-weight: 400;
+}
+
+body {
+  overflow-x: hidden;
+}

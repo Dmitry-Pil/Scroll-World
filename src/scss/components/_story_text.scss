@@ -1,0 +1,141 @@
+@use '../abstracts/variables' as vars;
+
+// each phrase can choose a layout while sharing the same overlay and typography
+.story_text {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: clamp(20px, 5vw, 80px);
+  pointer-events: none;
+
+  // bold Helvetica stays readable without adding a box over the film
+  &__phrase {
+    grid-area: 1 / 1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.04em 0.22em;
+    max-width: 1300px;
+    margin: 0;
+    opacity: 0;
+    visibility: hidden;
+
+    // tightly spaced display type is shared by every animation in this test
+    font-size: clamp(64px, 11vw, 190px);
+    text-transform: uppercase;
+    color: vars.$color_cream;
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.045em;
+    text-align: center;
+    text-shadow: 0 3px 28px rgba(0, 0, 0, 0.4);
+
+    &.is_active {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  // ALWAYS gets its own first row; ON THE GO stays together on the second row
+  &__phrase--left {
+    justify-self: start;
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    justify-content: start;
+    text-align: left;
+
+    .story_text__mask:first-child {
+      grid-column: 1 / -1;
+    }
+
+    // force all three remaining words into the second row, even before they reveal
+    .story_text__mask:not(:first-child) {
+      grid-row: 2;
+    }
+  }
+
+  // three compact rows form the cafe's staircase from top left to bottom right
+  &__phrase--diagonal {
+    width: 100%;
+    height: auto;
+    max-width: none;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    // size rows to the words rather than spreading them across the whole viewport
+    grid-template-rows: repeat(3, max-content);
+    row-gap: 0;
+    justify-items: center;
+    align-items: center;
+
+    // shallow windows need a height limit so three large words don't collide
+    font-size: min(11vw, 17svh, 190px);
+
+    .story_text__mask:nth-child(1) {
+      justify-self: start;
+      align-self: start;
+    }
+
+    // WITH keeps the centre anchor between the two opposite corners
+    .story_text__mask:nth-child(2) {
+      justify-self: center;
+      align-self: center;
+    }
+
+    .story_text__mask:nth-child(3) {
+      justify-self: end;
+      align-self: end;
+    }
+  }
+
+  // word wrappers supply a baseline for the masked reveals
+  &__mask {
+    display: inline-block;
+    padding: 0.08em 0;
+  }
+
+  &__word {
+    display: inline-block;
+    transform-origin: 50% 80%;
+  }
+
+  // only the mask version clips its moving words along the baseline
+  &__phrase--mask &__mask {
+    overflow: hidden;
+  }
+
+  // keep a useful description available without a constantly announcing live region
+  &__accessible {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  // reduced motion uses a small static caption above the normal playback controls
+  &--reduced &__accessible {
+    width: auto;
+    height: auto;
+    left: 24px;
+    right: 24px;
+    bottom: 64px;
+    margin: 0;
+    overflow: visible;
+    clip-path: none;
+    font-size: 18px;
+    text-shadow: 0 2px 10px #000;
+  }
+
+  // scale down on phones without allowing an individual word to overflow
+  @media (max-width: 600px) {
+    &__phrase {
+      font-size: clamp(40px, 12vw, 72px);
+    }
+
+    // keep the diagonal height limit when a phone is held horizontally
+    &__phrase--diagonal {
+      font-size: min(12vw, 17svh, 72px);
+    }
+  }
+}

@@ -1,0 +1,7 @@
+@forward 'scroll_video';
+
+// text overlays have their own stylesheet so the video stage stays independent
+@forward 'story_text';
+
+// footer colours and layout live alongside the other component styles
+@forward 'site_footer';
